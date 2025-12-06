@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "leasing-backend"
+version = "0.1.0"
+description = "Backend for leasing web system built with FastAPI"
+authors = ["Your Name <you@example.com>"]
+
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.121.3"
+sqlalchemy = "^2.0.44"
+jwt = "^1.4.0"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+psycopg2 = "^2.9.11"
+alembic = "^1.17.2"
+pydantic-settings = "^2.12.0"
+psycopg2-binary = "^2.9.11"
+jinja2 = "^3.1.6"
+uvicorn = "^0.38.0"
+pydantic = {extras = ["email"], version = "^2.12.5"}
+python-multipart = "^0.0.20"
+itsdangerous = "^2.2.0"

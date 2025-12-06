@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Платежи{% endblock %}
+
+{% block content %}
+<h2>История платежей</h2>
+
+<table id="paymentsTable">
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Сумма</th>
+            <th>Статус</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+async function loadPayments() {
+    let response = await fetch("/api/payments/list");
+    let data = await response.json();
+
+    const tbody = document.querySelector("#paymentsTable tbody");
+    tbody.innerHTML = "";
+
+    data.payments.forEach(p => {
+        tbody.innerHTML += `
+        <tr>
+            <td>${p.date}</td>
+            <td>${p.amount}</td>
+            <td>${p.status}</td>
+        </tr>`;
+    });
+}
+
+// автообновление каждые 20 секунд
+setInterval(loadPayments, 20000);
+
+loadPayments();
+</script>
+{% endblock %}

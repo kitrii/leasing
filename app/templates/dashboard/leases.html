@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Мои заявки{% endblock %}
+
+{% block content %}
+
+<a href="/dashboard" class="back-btn">← В личный кабинет</a>
+
+<h2>Мои заявки</h2>
+
+<div style="margin-bottom: 15px;">
+    <select id="statusFilter">
+        <option value="all">Все</option>
+        <option value="Отправлена">Отправлена</option>
+        <option value="Одобрена">Одобрена</option>
+        <option value="Отклонена">Отклонена</option>
+    </select>
+
+    <select id="sortOrder">
+        <option value="desc">Сначала новые</option>
+        <option value="asc">Сначала старые</option>
+    </select>
+</div>
+
+<table id="leasesTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Оборудование</th>
+            <th>Сумма</th>
+            <th>Статус</th>
+            <th>Дата создания</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+async function loadLeases(){
+    const status = document.getElementById("statusFilter").value;
+    const order = document.getElementById("sortOrder").value;
+
+    const res = await fetch(`/api/leases/list?status=${status}&order=${order}`);
+    const data = await res.json();
+
+    const tbody = document.querySelector("#leasesTable tbody");
+    tbody.innerHTML = "";
+
+    data.leases.forEach(l => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${l.id}</td>
+                <td>${l.equipment}</td>
+                <td>${l.amount} ₽</td>
+                <td>${l.status}</td>
+                <td>${l.created_at}</td>
+            </tr>`;
+    });
+}
+
+document.getElementById("statusFilter").onchange = loadLeases;
+document.getElementById("sortOrder").onchange = loadLeases;
+
+setInterval(loadLeases, 20000);
+
+loadLeases();
+</script>
+
+{% endblock %}
