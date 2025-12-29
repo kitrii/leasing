@@ -1,0 +1,66 @@
+[
+  {
+    "type": "mining",
+    "name": "Экскаватор Caterpillar",
+    "description": "Гусеничный экскаватор для горнодобывающих работ.",
+    "price": 85000000,
+    "power": 150,
+    "year": 2022
+  },
+  {
+    "type": "mining",
+    "name": "Дробилка Metso",
+    "description": "Дробильное оборудование для руды и камня.",
+    "price": 45000000,
+    "power": 80,
+    "year": 2021
+  },
+  {
+    "type": "mining",
+    "name": "Конвейер Sandvik",
+    "description": "Конвейер для транспортировки материалов.",
+    "price": 25000000,
+    "power": 50,
+    "year": 2020
+  },
+  {
+    "type": "mining",
+    "name": "Буровая установка Atlas Copco",
+    "description": "Установка для бурения шахт и карьеров.",
+    "price": 60000000,
+    "power": 120,
+    "year": 2021
+  },
+  {
+    "type": "mining",
+    "name": "Самосвал BelAZ",
+    "description": "Карьерный самосвал для перевозки горной массы.",
+    "price": 90000000,
+    "power": 200,
+    "year": 2023
+  },
+  {
+    "type": "mining",
+    "name": "Фрезерный экскаватор Komatsu",
+    "description": "Фрезерная техника для обогащения руды.",
+    "price": 55000000,
+    "power": 110,
+    "year": 2022
+  },
+  {
+    "type": "mining",
+    "name": "Щековая дробилка Terex",
+    "description": "Дробилка для первичного измельчения руд.",
+    "price": 40000000,
+    "power": 70,
+    "year": 2020
+  },
+  {
+    "type": "mining",
+    "name": "Вибрационный грохот Sandvik",
+    "description": "Грохот для сортировки руд и песка.",
+    "price": 35000000,
+    "power": 60,
+    "year": 2021
+  }
+]

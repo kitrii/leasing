@@ -1,0 +1,12 @@
+[
+  {"type":"construction","name":"Кран гусеничный C-100","description":"Для строительства высотных зданий.","price":75000000,"power":500,"year":2019,"image":"https://placehold.co/300x300?text=No+Image"},
+  {"type":"construction","name":"Бетоносмеситель B-200","description":"Смесь бетона высокого качества.","price":12000000,"power":50,"year":2020,"image":"https://placehold.co/300x300?text=No+Image"},
+  {"type":"construction","name":"Асфальтоукладчик A-50","description":"Укладка асфальта на дорожные покрытия.","price":9500000,"power":40,"year":2021,"image":"https://placehold.co/300x300?text=No+Image"},
+  {"type":"construction","name":"Экскаватор E-300","description":"Копка и перемещение грунта.","price":42000000,"power":200,"year":2022,"image":"https://placehold.co/300x300?text=No+Image"},
+  {"type":"construction","name":"Подъемник P-150","description":"Для подъема материалов на высоту.","price":15000000,"power":100,"year":2020,"image":"https://placehold.co/300x300?text=No+Image"},
+  {"type":"construction","name":"Грейдер G-100","description":"Выравнивание поверхности.","price":7000000,"power":60,"year":2021,"image":"https://placehold.co/300x300?text=No+Image"},
+  {"type":"construction","name":"Фронтальный погрузчик F-250","description":"Погрузка и транспортировка материалов.","price":25000000,"power":150,"year":2019,"image":"https://placehold.co/300x300?text=No+Image"},
+  {"type":"construction","name":"Бульдозер B-300","description":"Для расчистки и перемещения земли.","price":40000000,"power":250,"year":2022,"image":"https://placehold.co/300x300?text=No+Image"},
+  {"type":"construction","name":"Кран башенный T-50","description":"Строительство высотных объектов.","price":60000000,"power":300,"year":2021,"image":"https://placehold.co/300x300?text=No+Image"},
+  {"type":"construction","name":"Мини-экскаватор M-100","description":"Работы на небольших площадках.","price":9000000,"power":50,"year":2020,"image":"https://placehold.co/300x300?text=No+Image"}
+]

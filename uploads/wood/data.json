@@ -1,0 +1,6 @@
+[
+  {"type":"wood","name":"Пилорама W-200","description":"Для распиловки бревен на доски.","price":5500000,"power":40,"year":2020,"image":"https://placehold.co/300x300?text=No+Image"},
+  {"type":"wood","name":"Фрезерный станок F-150","description":"Обработка деревянных заготовок.","price":8500000,"power":50,"year":2021,"image":"https://placehold.co/300x300?text=No+Image"},
+  {"type":"wood","name":"Пресс для досок P-100","description":"Прессование деревянных панелей.","price":4200000,"power":35,"year":2022,"image":"https://placehold.co/300x300?text=No+Image"}
+
+]

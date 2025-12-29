@@ -1,18 +1,21 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Enum as SAEnum
 from sqlalchemy.orm import relationship
 from datetime import datetime
+
+from app.data.enums import LeasePaymentScheme, LeaseStatus
 from app.db.database import Base
+
 
 class Lease(Base):
     __tablename__ = "leases"
     id = Column(Integer, primary_key=True, index=True)
-    equipment = Column(String)
+    equipment = Column(Integer)
     amount = Column(Float)
     advance = Column(Float)
-    term = Column(Integer)
+    term = Column(Integer)  # в месяцах
     rate = Column(Float)
-    payment_scheme = Column(String)
-    status = Column(String, default="Отправлена")
+    payment_scheme = Column(SAEnum(LeasePaymentScheme), default=LeasePaymentScheme.annuity)
+    status = Column(SAEnum(LeaseStatus), default=LeaseStatus.send)
     created_at = Column(DateTime, default=datetime.utcnow)
     user_id = Column(Integer, ForeignKey("users.id"))
 
@@ -28,6 +31,6 @@ class Lease(Base):
             "rate": self.rate,
             "payment_scheme": self.payment_scheme,
             "status": self.status,
-            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M"),
+            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M") if self.created_at else "",
             "user_id": self.user_id
         }

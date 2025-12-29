@@ -1,0 +1,5 @@
+[
+
+  {"type":"metallurgy","name":"Печь плавильная M-500","description":"Используется для плавки стали и сплавов.","price":95000000,"power":1000,"year":2021,"image":"https://placehold.co/300x300?text=No+Image"},
+  {"type":"metallurgy","name":"Прокатный стан S-200","description":"Производство металлических листов.","price":125000000,"power":1500,"year":2022,"image":"https://placehold.co/300x300?text=No+Image"}
+]

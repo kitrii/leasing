@@ -4,6 +4,7 @@ version: "3.9"
 services:
   db:
     image: postgres:15
+    container_name: postgres
     environment:
       POSTGRES_DB: leasing
       POSTGRES_USER: leasing_user
@@ -12,14 +13,34 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-#    api:
-#      build: .
-#      depends_on:
-#        - db
-#      ports:
-#        - "8000:8000"
-#      environment:
-#        DATABASE_URL: postgresql+psycopg2://leasing_user:leasing_pass@db:5432/leasing
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    ports:
+      - "9000:9000"  # API
+      - "9001:9001"  # Web Console
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+
+#  api:
+#    build: .
+#    container_name: fastapi_app
+#    depends_on:
+#      - db
+#      - minio
+#    ports:
+#      - "8000:8000"
+#    environment:
+#      DATABASE_URL: postgresql+psycopg2://leasing_user:leasing_pass@db:5432/leasing
+#      MINIO_ENDPOINT: minio:9000
+#      MINIO_ACCESS_KEY: minioadmin
+#      MINIO_SECRET_KEY: minioadmin
 
 volumes:
   postgres_data:
+  minio_data:
