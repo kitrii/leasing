@@ -142,7 +142,8 @@ def login_user(
 
     return {
         "message": "Вход выполнен успешно",
-        "user_id": user.id
+        "user_id": user.id,
+        "role": user.role
     }
 
 

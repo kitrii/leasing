@@ -7,7 +7,8 @@ from datetime import datetime
 
 
 class PaymentStatus(str, Enum):
-    pending = "Ожидает"  # Платеж запланирован, но еще не произведен
+    formed = "Сформирован"  # Платёж сформирован, но не подтверждён самим лизингополучателем
+    accepted = "Согласован"  # Платеж запланирован, но еще не произведен
     paid = "Оплачен"  # Платеж выполнен
     overdue = "Просрочен"  # Платеж просрочен
 
@@ -18,7 +19,7 @@ class Payment(Base):
     lease_id = Column(Integer, ForeignKey("leases.id"))
     amount = Column(Float, nullable=False)  # Сумма платежа
     due_date = Column(DateTime, nullable=False, default=datetime.utcnow)  # Дата платежа
-    status = Column(Senam(PaymentStatus), default=PaymentStatus.pending)
+    status = Column(Senam(PaymentStatus), default=PaymentStatus.formed)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     def to_dict(self):

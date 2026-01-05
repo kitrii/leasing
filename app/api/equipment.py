@@ -104,3 +104,18 @@ def get_equipment(
     response = {"data": query.all()}
 
     return response
+
+
+@router.get("/equipment/{id}")
+def get_equipment_by_id(
+        id: int,
+        db: Session = Depends(get_db),
+):
+    query = db.query(Equipment).filter(Equipment.id == id)
+    result = query.first()
+    if not result:
+        raise HTTPException(status_code=404,
+                            detail=f"Оборудование по ID = {id} не было найдено! Перепроверьте данные!")
+
+    response = {"data": result}
+    return response
