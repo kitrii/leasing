@@ -1,42 +1,17 @@
-import datetime
-
-from fastapi import APIRouter, Depends, Request, Form, HTTPException
-from pydantic import BaseModel, Field, EmailStr
-from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from fastapi.templating import Jinja2Templates
-
-from app.data.enums import RoleEnum
-from app.db.database import SessionLocal, get_db
+from app.db.database import get_db
 from app.models import Payment, Lease, Equipment
 from app.models.payment import PaymentStatus
-from app.models.user import User
-from passlib.context import CryptContext
+from app.schemas.payment import PaymentCreate
 
-
-templates = Jinja2Templates(directory="app/templates")
 router = APIRouter()
-
-
-class PaymentCreate(BaseModel):
-    lease_id: int
-    amount: float
-    payment_date: datetime.datetime
-
-
-class PaymentStatusUpdate(BaseModel):
-    status: PaymentStatus
-
-
-class PaymentsByUser(BaseModel):
-    user_id: int
-
 
 
 @router.post("/payments/create")
 def create_payment(
-    payload: PaymentCreate,
-    db: Session = Depends(get_db)
+        payload: PaymentCreate,
+        db: Session = Depends(get_db)
 ):
     payment = Payment(
         lease_id=payload.lease_id,
@@ -155,29 +130,3 @@ def accept_payments(
         "message": "График платежей подтверждён",
         "payments": [p.to_dict() for p in payments]
     }
-
-
-from datetime import datetime, timedelta
-from sqlalchemy.orm import Session
-
-
-def generate_payments_for_lease(lease, db: Session):
-    try:
-        monthly_amount = lease.amount / lease.term
-
-        payments = []
-        for i in range(lease.term):
-            payments.append(
-                Payment(
-                    lease_id=lease.id,
-                    amount=monthly_amount,
-                    due_date=datetime.utcnow() + timedelta(days=30 * (i + 1))                )
-            )
-
-        db.add_all(payments)
-        db.commit()
-
-    except Exception as e:
-        db.rollback()
-        print("REAL ERROR:", repr(e))
-        raise e

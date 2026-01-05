@@ -21,3 +21,7 @@ class LeaseStatus(str, Enum):
     in_progress = "В процессе обработки"  # Лизинг выполняется, платежи идут
     completed = "Завершена"  # Все платежи выполнены, лизинг закрыт
     cancelled = "Отменена лизингополучателем"  # Заявка или лизинг отменен пользователем
+
+class PaymentScheme(str, Enum):
+    annuity = "annuity"
+    differentiated = "differentiated"

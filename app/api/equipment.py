@@ -1,15 +1,14 @@
-
 from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException
 from sqlalchemy.orm import Session
-
-from app.api.minio_client import client, MINIO_BUCKET, ensure_public_bucket
+from app.data.constants import DEFAULT_IMAGE_URL
 from app.db.database import get_db
 from app.models.equipment import Equipment
-import uuid
+
+from app.utils.minio_utils import upload_image_to_minio
+from typing import Optional
+from fastapi import Query
 
 router = APIRouter()
-
-DEFAULT_IMAGE_URL = "https://placehold.co/300x300?text=No+Image"
 
 
 @router.post("/equipment/create")
@@ -24,33 +23,7 @@ def create_equipment(
         db: Session = Depends(get_db),
 ):
     if image:
-        # Генерация уникального имени файла
-        file_ext = image.filename.split(".")[-1]
-        object_name = f"{uuid.uuid4()}.{file_ext}"
-
-        bucket_name = type.lower()  # тип оборудования
-        ensure_public_bucket(client, bucket_name)
-
-        try:
-            client.make_bucket(bucket_name)
-        except Exception:
-            pass  # бакет уже есть, ничего не делаем
-
-        # Загрузка в MinIO
-        try:
-            client.put_object(
-                bucket_name=bucket_name,
-                object_name=object_name,
-                data=image.file,
-                length=-1,
-                part_size=10 * 1024 * 1024,  # 10MB
-                content_type=image.content_type
-            )
-
-            MINIO_HOST = "localhost:9000"
-            image_url = f"http://{MINIO_HOST}/{bucket_name}/{object_name}"
-        except Exception as error:
-            raise HTTPException(status_code=400, detail="Ошибка при загрузке в MINIO!")
+        image_url = upload_image_to_minio(image, bucket_name=type.lower())
     else:
         image_url = DEFAULT_IMAGE_URL
 
@@ -67,10 +40,6 @@ def create_equipment(
     db.commit()
     db.refresh(equipment)
     return equipment
-
-
-from typing import List, Optional
-from fastapi import Query
 
 
 @router.get("/equipment/")

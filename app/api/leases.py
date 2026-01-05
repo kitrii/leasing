@@ -1,55 +1,16 @@
-from datetime import datetime
-
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
 from sqlalchemy import desc, asc
 from sqlalchemy.orm import Session
-from fastapi.templating import Jinja2Templates
 
-from app.api.payments import generate_payments_for_lease
 from app.data.enums import LeaseStatus
 from app.db.database import get_db
 from app.models import Equipment
 from app.models.lease import Lease
+from app.schemas.lease import LeaseCreateRequest
+from app.utils.lease_utils import calculate_lease_amount
+from app.utils.payment_utils import generate_payments_for_lease
 
 router = APIRouter()
-templates = Jinja2Templates(directory="app/templates")
-
-
-class LeaseCreateRequest(BaseModel):
-    user_id: int
-    equipment_id: int
-    advance: int
-    amount: float
-    term: int
-    rate: float
-    payment_scheme: str | None = None
-
-
-class LeaseReadResponse(BaseModel):
-    id: int
-    user_id: int
-    equipment_id: int
-    amount: float
-    term: int
-    rate: float
-    payment_scheme: str
-    status: str
-    created_at: datetime
-
-    class Config:
-        orm_mode = True
-
-
-class PaymentRead(BaseModel):
-    id: int
-    lease_id: int
-    amount: float
-    date: datetime
-    status: str
-
-    class Config:
-        orm_mode = True
 
 
 @router.get("/api/leases/list/{user_id}")
@@ -85,18 +46,18 @@ def list_leases(
     )
 
     result = [{
-            "id": lease[0],
-            "equipment_id": lease[1],
-            "amount": lease[2],
-            "advance": lease[3],
-            "term": lease[4],
-            "rate": lease[5],
-            "payment_scheme": lease[6],
-            "status": lease[7],
-            "created_at": lease[8].strftime("%Y-%m-%d %H:%M") if lease[8] else "",
-            "user_id": lease[9],
-            "equipment_name": lease[10],
-        } for lease in query.all()]
+        "id": lease[0],
+        "equipment_id": lease[1],
+        "amount": lease[2],
+        "advance": lease[3],
+        "term": lease[4],
+        "rate": lease[5],
+        "payment_scheme": lease[6],
+        "status": lease[7],
+        "created_at": lease[8].strftime("%Y-%m-%d %H:%M") if lease[8] else "",
+        "user_id": lease[9],
+        "equipment_name": lease[10],
+    } for lease in query.all()]
     response = {"leases": result}
 
     return response
@@ -127,9 +88,14 @@ def list_all_leases(
 @router.post("/api/leases/create")
 def create_lease(request: LeaseCreateRequest, db: Session = Depends(get_db)):
     try:
+        lease_amount = calculate_lease_amount(
+            advance=request.advance,
+            rate=request.rate,
+            term=request.term
+        )
         lease = Lease(
             equipment=request.equipment_id,
-            amount=request.advance + float(request.term) * float(request.rate),
+            amount=lease_amount,
             advance=request.advance,
             term=request.term,
             rate=request.rate,

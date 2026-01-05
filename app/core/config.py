@@ -4,6 +4,8 @@ from pydantic_settings import BaseSettings
 from pydantic import Field
 from functools import lru_cache
 
+MINIO_HOST = "localhost:9000"
+
 
 class Settings(BaseSettings):
     # --- GENERAL APP SETTINGS ---

@@ -1,83 +1,15 @@
-import datetime
-
-from fastapi import APIRouter, Depends
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, EmailStr
 from sqlalchemy.exc import SQLAlchemyError
+
+from app.core.security import hash_password, verify_password
+from app.db.database import get_db
+from app.models.user import User
+
+from app.schemas.user import RegisterRequest, LoginRequest
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.data.enums import RoleEnum
-from app.db.database import SessionLocal
-from app.models.user import User
-from passlib.context import CryptContext
-
 router = APIRouter()
-
-pwd_context = CryptContext(
-    schemes=["argon2"],
-    deprecated="auto"
-)
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-class RegisterRequest(BaseModel):
-    email: EmailStr
-    password: str = Field(min_length=8, max_length=64)
-    full_name: str | None = None
-    phone: str | None = None
-    role: str | None = None
-
-
-class LoginRequest(BaseModel):
-    email: str
-    password: str
-
-
-class MessageResponse(BaseModel):
-    message: str
-
-
-class LoginResponse(BaseModel):
-    message: str
-    user_id: int
-
-
-class UserReadResponse(BaseModel):
-    id: int
-    email: str
-    full_name: str | None
-    phone: str | None
-    role: RoleEnum
-    created_at: datetime.datetime
-    is_active: bool
-
-    class Config:
-        from_attributes = True
-
-
-def hash_password(password: str) -> str:
-    if not isinstance(password, str):
-        raise ValueError("Password must be a string")
-
-    password_bytes = password.encode("utf-8")
-
-    if len(password_bytes) > 72:
-        raise HTTPException(
-            status_code=400,
-            detail="Пароль слишком длинный (максимум 72 байта)"
-        )
-
-    return pwd_context.hash(password_bytes)
-
-
-def verify_password(password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(password, hashed_password)
 
 
 @router.post("/register")
@@ -167,10 +99,6 @@ class UserUpdateProfile(BaseModel):
     email: Optional[EmailStr] = None
     full_name: Optional[str] = None
     phone: Optional[str] = None
-
-
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
 
 
 @router.patch("/users/{user_id}/profile")
